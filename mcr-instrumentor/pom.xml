@@ -21,6 +21,12 @@
             <systemPath>${pom.basedir}/src/main/resources/libs/asm.jar</systemPath>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.ow2.asm/asm -->
+        <!--<dependency>-->
+            <!--<groupId>org.ow2.asm</groupId>-->
+            <!--<artifactId>asm</artifactId>-->
+            <!--<version>5.2</version>-->
+        <!--</dependency>-->
 
         <!--<dependency>-->
             <!--<groupId>org.ow2.asm</groupId>-->

@@ -10,9 +10,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: junit:junit:4.8.2" level="project" />
-    <orderEntry type="module" module-name="mcr-constraints" />
-    <orderEntry type="library" name="Maven: org.w3c.jigsaw:jigsaw:2.2.6" level="project" />
-    <orderEntry type="library" name="Maven: com.beust:jcommander:1.69" level="project" />
+    <orderEntry type="library" name="Maven: aser:mcr-constraints:1.0-SNAPSHOT" level="project" />
     <orderEntry type="module" module-name="mcr-instrumentor" />
     <orderEntry type="module-library">
       <library name="Maven: asm:asm:3.0">

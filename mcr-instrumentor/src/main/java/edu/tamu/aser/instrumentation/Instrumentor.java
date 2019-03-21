@@ -1,5 +1,7 @@
 package edu.tamu.aser.instrumentation;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
@@ -59,7 +61,7 @@ public class Instrumentor {
     private static Boolean debug;
 
     public static void premain(String agentArgs, Instrumentation inst) {
-        
+
         MCRProperties mcrProps = MCRProperties.getInstance();
         storePropertyValues(mcrProps.getProperty(MCRProperties.INSTRUMENTATION_PACKAGES_IGNORE_PREFIXES_KEY), pckgPrefixesToIgnore);
         storePropertyValues(mcrProps.getProperty(MCRProperties.INSTRUMENTATION_PACKAGES_IGNORE_KEY), pckgsToIgnore);
@@ -89,12 +91,11 @@ public class Instrumentor {
                                     ProtectionDomain protectionDomain,
                                     byte[] classfileBuffer) throws IllegalClassFormatException {
                 try {
-                /*
-                 * filter out the library classes
-                 */
+                    /*
+                     * filter out the library classes
+                     */
                     if (shouldInstrumentClass(className)) {
-                        if (debug)
-                        {
+                        if (debug) {
                             System.out.println("Instrumenting " + className);
                         }
 
@@ -132,6 +133,20 @@ public class Instrumentor {
 
                         }
 
+                        File dir = new File("out");
+                        if (!dir.exists()) {
+                            dir.mkdir();
+                        }
+
+                        File classFile = new File(dir, className.replace("/", ".") + ".class");
+                        System.out.println("class file path: " + classFile.getAbsolutePath());
+                        classFile.createNewFile();
+                        System.out.println("Writing " + className);
+                        byte[] code = classWriter.toByteArray();
+                        FileOutputStream fos = new FileOutputStream(classFile);
+                        fos.write(code);
+                        fos.close();
+
                     }
                 } catch (Throwable th) {
                     th.printStackTrace();
@@ -164,7 +179,7 @@ public class Instrumentor {
          * when using Java 8 for controller and controller-test
          * name could be null
          */
-        if (name==null) {
+        if (name == null) {
             return false;
         }
 

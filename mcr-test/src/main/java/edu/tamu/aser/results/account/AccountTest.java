@@ -43,6 +43,7 @@ public class AccountTest extends Failable {
 
     @Test
     public void test5ThreadDepositAndWithdrawAndCheckInvariant() throws Exception {
+        System.out.println("FUCK YOU ");
         performDepositsAndWithdrawalsAndCheckInvariant(5);
     }
 

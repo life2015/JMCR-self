@@ -102,6 +102,16 @@ function runTests()
      	-Dmemory_model=$model  \
      	-Dclass_path=$class_path  -Dclass_name=$class_name \
      	org.junit.runner.JUnitCore $class_name $params
+
+	echo "java -ea -javaagent:libs/agent.jar \
+    	-cp '.:./build/*:./libs/*:./mcr-test/target/classes/'  \
+     	-Ddebug=$debug \
+     	-Ddep_mcr=$static_opt \
+     	-Dopt_mcr=$opt_mcr \
+     	-Dmcr.exploration.scheduling.strategy=$explorer \
+     	-Dmemory_model=$model  \
+     	-Dclass_path=$class_path  -Dclass_name=$class_name \
+     	org.junit.runner.JUnitCore $class_name $params"
 }
 
 # test if it needs to run the static analysis to generate the SGD
