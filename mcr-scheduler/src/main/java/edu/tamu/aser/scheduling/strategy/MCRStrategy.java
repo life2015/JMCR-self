@@ -1,13 +1,7 @@
 package edu.tamu.aser.scheduling.strategy;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Queue;
-import java.util.SortedSet;
-import java.util.Vector;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -184,11 +178,11 @@ public class MCRStrategy extends SchedulingStrategy {
 		return result;
 	}
 
-	@Override
+//	@Override
 	/**
 	 * choose the next statement to execute
 	 */
-	public Object choose(SortedSet<? extends Object> objectChoices,
+	public Object choose2(SortedSet<? extends Object> objectChoices,
 			ChoiceType choiceType) {
 		/*
 		 * Initialize choice
@@ -274,6 +268,40 @@ public class MCRStrategy extends SchedulingStrategy {
         		
 		this.previousThreadInfo = (ThreadInfo) chosenObject;
 		
+		return chosenObject;
+	}
+
+
+	@Override
+	public Object choose(SortedSet<?> objectChoices, ChoiceType choiceType) {
+		int chosenIndex = 0;
+		Object chosenObject = null;
+		System.out.println("=======================");
+		System.out.println("您可以选择：");
+
+		if (objectChoices != null) {
+			Iterator i1 = objectChoices.iterator();
+			int i = 0;
+			while (i1.hasNext()) {
+				System.out.println(i + ") <<< " + i1.next().toString() + ">>>");
+				i++;
+			}
+		}
+
+		System.out.println("请输入选择的节点");
+//		Scanner scanner = new Scanner(System.in);
+//		int chosen = Integer.MAX_VALUE;
+//		while (chosen > objectChoices.size() - 1) {
+//			chosen = scanner.nextInt();
+//		}
+
+		int chosen = 0;
+		chosenIndex = chosen;
+		chosenObject = getChosenObject(chosenIndex, objectChoices);
+
+		MCRStrategy.choicesMade.add(chosenIndex);
+
+		this.previousThreadInfo = (ThreadInfo) chosenObject;
 		return chosenObject;
 	}
 
