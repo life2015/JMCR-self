@@ -38,7 +38,9 @@ public class Instrumentor {
     private static Set<String> packagesThatWereNOTInstrumented;
 
     static {
-        INSTR_EVENTS_RECEIVER = "edu.tamu.aser.reex.Scheduler".replace(DOT, SLASH);
+        String backUp = "edu.tamu.aser.proxy.SchedulerProxy";
+        INSTR_EVENTS_RECEIVER = backUp.replace(DOT, SLASH);
+//        INSTR_EVENTS_RECEIVER = "edu.tamu.aser.reex.Scheduler".replace(DOT, SLASH);
         packagesThatWereInstrumented = new HashSet<String>();
         packagesThatWereNOTInstrumented = new HashSet<String>();
     }

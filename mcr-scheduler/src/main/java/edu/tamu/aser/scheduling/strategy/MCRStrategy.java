@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.retrox.WSServer;
 import edu.tamu.aser.StartExploring;
 import edu.tamu.aser.config.Configuration;
 import edu.tamu.aser.instrumentation.RVGlobalStateForInstrumentation;
@@ -287,8 +288,8 @@ public class MCRStrategy extends SchedulingStrategy {
 				i++;
 			}
 		}
-
 		System.out.println("请输入选择的节点");
+		WSServer.INSTANCE.sayHello();
 //		Scanner scanner = new Scanner(System.in);
 //		int chosen = Integer.MAX_VALUE;
 //		while (chosen > objectChoices.size() - 1) {

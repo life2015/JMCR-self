@@ -588,7 +588,7 @@ public class Scheduler {
         }
     }
     /**
-     * Print an error message for unexpected usage of Unsafe class during
+     * Print an error router for unexpected usage of Unsafe class during
      * exploration
      * 
      * @param owner
