@@ -156,28 +156,34 @@ public class MCRStrategy extends SchedulingStrategy {
 		MCRStrategy.executor.submit(causalTrace);
 	}
 
+//	@Override
+//	public boolean canExecuteMoreSchedules() {
+//		boolean result = (!this.toExplore.isEmpty())
+//				|| this.notYetExecutedFirstSchedule;
+//		if (result) {
+//			return true;
+//		}
+//
+//		while (StartExploring.executorsCount.getValue() > 0) {
+//			try {
+//				Thread.sleep(10);
+//				// if (!this.toExplore.isEmpty()) {
+//				// return true;
+//				// }
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		result = (!this.toExplore.isEmpty())
+//				|| this.notYetExecutedFirstSchedule;
+//		return result;
+//	}
+
 	@Override
 	public boolean canExecuteMoreSchedules() {
-		boolean result = (!this.toExplore.isEmpty())
-				|| this.notYetExecutedFirstSchedule;
-		if (result) {
-			return true;
-		}
-
-		while (StartExploring.executorsCount.getValue() > 0) {
-			try {
-				Thread.sleep(10);
-				// if (!this.toExplore.isEmpty()) {
-				// return true;
-				// }
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		result = (!this.toExplore.isEmpty())
-				|| this.notYetExecutedFirstSchedule;
-		return result;
+		return this.notYetExecutedFirstSchedule;
 	}
+
 
 //	@Override
 	/**
@@ -289,15 +295,19 @@ public class MCRStrategy extends SchedulingStrategy {
 			}
 		}
 		System.out.println("请输入选择的节点");
-		WSServer.INSTANCE.sayHello();
+//		WSServer.INSTANCE.sayHello();
 //		Scanner scanner = new Scanner(System.in);
 //		int chosen = Integer.MAX_VALUE;
 //		while (chosen > objectChoices.size() - 1) {
 //			chosen = scanner.nextInt();
 //		}
 
-		int chosen = 0;
-		chosenIndex = chosen;
+		Random random = new Random();
+		int next = random.nextInt(objectChoices.size());
+		System.out.println("随机输入节点: " + next);
+
+//		int chosen = 0;
+		chosenIndex = next;
 		chosenObject = getChosenObject(chosenIndex, objectChoices);
 
 		MCRStrategy.choicesMade.add(chosenIndex);

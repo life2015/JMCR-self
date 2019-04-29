@@ -286,6 +286,8 @@ public class MethodAdapter extends AdviceAdapter implements Opcodes {
     private static final String AFTER_ARRAY_ACCESS = "afterArrayAccess";
     private static final String BEFORE_ARRAY_ACCESS = "beforeArrayAccess";
     private static final String BOOL_3STRINGS_VOID = "(ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V";
+    private static final String BOOL_3STRINGS_OBJECT_VOID = "(ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;)V";
+
     private static final String BOOL_VOID = "(Z)V";
 
 
@@ -298,19 +300,21 @@ public class MethodAdapter extends AdviceAdapter implements Opcodes {
      * @param fieldOwner field owner
      * @param fieldName  field name
      * @param fieldDesc  description of the field
+     * @param index 局部变量表的Index
      */
     private void informSchedulerAboutFieldAccess(
             boolean isBefore,
             boolean isRead,
             String fieldOwner,
             String fieldName,
-            String fieldDesc) {
+            String fieldDesc, int index) {
         super.mv.visitInsn(isRead ? Opcodes.ICONST_1 : Opcodes.ICONST_0);
         super.mv.visitLdcInsn(fieldOwner);
         super.mv.visitLdcInsn(fieldName);
         super.mv.visitLdcInsn(fieldDesc);
+        loadValue(fieldDesc, index);
         if (isBefore) {
-            super.mv.visitMethodInsn(Opcodes.INVOKESTATIC, Instrumentor.INSTR_EVENTS_RECEIVER, BEFORE_FIELD_ACCESS, BOOL_3STRINGS_VOID);
+            super.mv.visitMethodInsn(Opcodes.INVOKESTATIC, Instrumentor.INSTR_EVENTS_RECEIVER, BEFORE_FIELD_ACCESS, BOOL_3STRINGS_OBJECT_VOID);
         } else {
             super.mv.visitMethodInsn(Opcodes.INVOKESTATIC, Instrumentor.INSTR_EVENTS_RECEIVER, AFTER_FIELD_ACCESS, BOOL_3STRINGS_VOID);
         }
@@ -353,7 +357,7 @@ public class MethodAdapter extends AdviceAdapter implements Opcodes {
 		switch (opcode) {
 		case GETSTATIC:	    
 		    if (!isInit){
-		        this.informSchedulerAboutFieldAccess(true, isRead, owner, name, desc);
+//		        this.informSchedulerAboutFieldAccess(true, isRead, owner, name, desc);
 		    }
 		    
 		    /*
@@ -387,6 +391,13 @@ public class MethodAdapter extends AdviceAdapter implements Opcodes {
 				mv.visitMethodInsn(INVOKESTATIC, logClass,
 						RVConfig.instance.LOG_FIELD_ACCESS,
 						RVConfig.instance.DESC_LOG_FIELD_ACCESS);
+
+                this.informSchedulerAboutFieldAccess(true, isRead, owner, name, desc, index);
+
+
+//                visitLdcInsn(name);
+//				loadValue(desc, index);
+//				visitMethodInsn(INVOKESTATIC, Instrumentor.INSTR_EVENTS_RECEIVER, "logValue", "(Ljava/lang/String;Ljava/lang/Object;)V");
 				
 				//judge whether or not to do an updating operation @Alan
 				if(Instrumentor.memModel.equals("TSO")){
@@ -413,7 +424,7 @@ public class MethodAdapter extends AdviceAdapter implements Opcodes {
 			// store the value to be written
 			storeValue(desc, index);
 			//mv.visitVarInsn(ISTORE, index);
-            this.informSchedulerAboutFieldAccess(true, isRead, owner, name, desc); //call beforeFieldAccess
+            this.informSchedulerAboutFieldAccess(true, isRead, owner, name, desc, index); //call beforeFieldAccess
 			  
             if(isInit){
                 putStatic(desc, owner, name, opcode, ID, SID, index);
@@ -463,7 +474,7 @@ public class MethodAdapter extends AdviceAdapter implements Opcodes {
 				int index1 = maxIndexCur;
 				mv.visitInsn(DUP);
 				mv.visitVarInsn(ASTORE, index1);
-	            this.informSchedulerAboutFieldAccess(true, isRead, owner, name, desc);
+//	            this.informSchedulerAboutFieldAccess(true, isRead, owner, name, desc);
 				mv.visitFieldInsn(opcode, owner, name, desc);
 
 				maxIndexCur++;
@@ -478,7 +489,9 @@ public class MethodAdapter extends AdviceAdapter implements Opcodes {
 
 				addBipushInsn(mv, 0);
 
-				mv.visitMethodInsn(INVOKESTATIC, logClass,
+                this.informSchedulerAboutFieldAccess(true, isRead, owner, name, desc, index2);
+
+                mv.visitMethodInsn(INVOKESTATIC, logClass,
 						RVConfig.instance.LOG_FIELD_ACCESS,
 						RVConfig.instance.DESC_LOG_FIELD_ACCESS);
 			} else {
@@ -544,7 +557,7 @@ public class MethodAdapter extends AdviceAdapter implements Opcodes {
 				mv.visitVarInsn(ILOAD, index1);
 			}
 			if (!isInit)
-            this.informSchedulerAboutFieldAccess(true, isRead, owner, name, desc);
+            this.informSchedulerAboutFieldAccess(true, isRead, owner, name, desc, index1);
 
             mv.visitFieldInsn(opcode, owner, name, desc);
 

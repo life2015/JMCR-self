@@ -581,6 +581,12 @@ public class Scheduler {
             beforeEvent(new FieldAccessEventDesc(isRead ? EventType.READ : EventType.WRITE, owner, name, desc), true);
         }
     }
+
+    public static void beforeFieldAccess(boolean isRead, String owner, String name, String desc, Object value, boolean pause) {
+        if (exploring) {
+            beforeEvent(new FieldAccessEventDesc(isRead ? EventType.READ : EventType.WRITE, owner, name, desc, value), pause);
+        }
+    }
     
     public static void beforeArrayAccess(boolean isRead) {
         if (exploring) {
