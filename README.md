@@ -1,5 +1,30 @@
 [![Build Status](https://travis-ci.org/travis-ci/travis-web.svg?branch=master)](https://travis-ci.org/travis-ci/travis-web)
 
+# 修改版
+基于JMCR修改，新增了Server模块，铺设了一条基于WebSocket的C/S通信渠道。其中一部分使用Kotlin编写。
+
+# 开始运行
+- mvn package 构建项目
+- 使用命令行启动程序（具体命令会写在后面）
+- 服务端等待客户端连接，在Idea里面运行Real Client里面的main程序，然后在开启服务端的命令行里面敲个回车，开始运行。
+- 客户端里面敲相关的通信内容然后回车即可发送
+
+```shell
+java -ea -javaagent:libs/agent.jar          -cp '.:./build/*:./libs/*:./mcr-test/target/classes/:./server/target/lib/*'               -Ddebug=true           -Ddep_mcr=false         -Dopt_mcr=              -Dmcr.exploration.scheduling.strategy=edu.tamu.aser.scheduling.strategy.MCRStrategy             -Dmemory_model=SC           -Dclass_path=./mcr-test/target/classes/  -Dclass_name=edu.tamu.aser.results.RVExample           org.junit.runner.JUnitCore edu.tamu.aser.results.RVExample
+```
+客户端发送内容实例 
+```javascript
+// 收到服务端choose的内容后，查看Response_code字段，后面回复信息的字段要保持一致
+{
+  "code": 1,
+  "response_code": 1,
+  "router": "/choose",
+  "data": {
+    "index": -1 // -1 是随机选择 0,1,2是常规选择那种。
+  }
+}
+```
+
 # Maximal-Causality-Reduction (MCR) Java version
 
 MCR is a stateless model checker powered by an efficient reduction algorithm. It systematically explores the state-space of the program by collecting runtime traces of the program executions and constructing ordering constraints over the traces to generate other possible schedules. It captures the values of the writes and reads to prune redundant explorations. By enforcing at least one read to return a different value, it generates a new schedule which drives the program to reach a new state. 

@@ -41,21 +41,3 @@ fun main() {
     }
 
 }
-
-object Test {
-    fun test (x : Int) {
-        println(x)
-        val test = "a2222"
-        println(test)
-    }
-}
-
-class TEST222(val x: Int = 1, val y: Int = 2 , val z: Int = 3) {
-    init {
-        println("222")
-    }
-}
-
-fun fuck() {
-    val obj = TEST222(1,z =2,y = 3)
-}

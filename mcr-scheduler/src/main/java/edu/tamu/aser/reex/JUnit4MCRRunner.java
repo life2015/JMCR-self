@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Scanner;
 
+import com.retrox.RealServer;
 import edu.tamu.aser.reex.JUnit4WrappedRunNotifier;
 import edu.tamu.aser.reex.Scheduler;
 import edu.tamu.aser.scheduling.MCRProperties;
@@ -116,7 +118,14 @@ public class JUnit4MCRRunner extends BlockJUnit4ClassRunner {
         this.currentTestNotifier = notifier;
         Trace.appname = method.getMethod().getDeclaringClass().getName();
         Map<String, Orderings> schedules = collectSchedules();
-        
+
+        // Start Server
+        RealServer server = new RealServer();
+        server.start();
+		Scanner scanner = new Scanner(System.in);
+        System.out.println("确保客户端连接 然后敲回车。"); // 理论上应该写个阻塞的Listener来控制 将来要支持客户端控制流程
+		scanner.nextLine();
+
         if (!schedules.isEmpty()) {
             for (Entry<String, Orderings> schedule : schedules.entrySet()) {
                 Scheduler.setIMUnitSchedule(schedule.getKey(), schedule.getValue());

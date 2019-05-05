@@ -445,7 +445,7 @@ public class Scheduler {
      * 
      * @return the choice.
      */
-    public static Object choose(SortedSet<? extends Object> objectChoices, ChoiceType choiceType) {
+    public static Object choose(SortedSet<? extends Object/* ThreadInfo */> objectChoices, ChoiceType choiceType) {
         if (objectChoices.isEmpty()) {
             throw new IllegalArgumentException("There has to be at least one choice i.e. objectChoices cannot be empty");
         }
@@ -453,6 +453,7 @@ public class Scheduler {
         try {
             objectChoices = schedulingFilter.filterChoices(objectChoices, choiceType);
             Object chosenObject;
+            // 在只有一个选择的时候 就也没有必要再去把选择权交给Strategy
             if (objectChoices.size() == 1) {  //when there is only one thread, it has to execute this thread
                 chosenObject = objectChoices.first();
                 // System.out.println("Choose only:" + ((ThreadInfo)chosenObject).getThread().getId());

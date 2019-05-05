@@ -4,6 +4,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.google.gson.JsonSyntaxException
 import com.retrox.server.ConnectionHandler
+import com.retrox.server.ConnectionManager
 import org.java_websocket.WebSocket
 import org.java_websocket.handshake.ClientHandshake
 import org.java_websocket.server.WebSocketServer
@@ -20,6 +21,7 @@ class RealServer(address: InetSocketAddress = InetSocketAddress(4444)) : WebSock
         conn.send("Welcome to server ${handshake.resourceDescriptor}")
         println("New Connection ${conn.remoteSocketAddress} ${handshake.resourceDescriptor}")
         conectionHandler = ConnectionHandler(conn)
+        ConnectionManager.connectionHandler = conectionHandler // 暂时给他一个全局性的连接
     }
 
     override fun onClose(conn: WebSocket, code: Int, reason: String, remote: Boolean) {
@@ -28,7 +30,6 @@ class RealServer(address: InetSocketAddress = InetSocketAddress(4444)) : WebSock
 
     override fun onMessage(conn: WebSocket, message: String) {
         println("Receive Message $conn $message")
-        conn.send("FUCK YOU")
         conectionHandler?.offerMessage(message)
     }
 
@@ -57,7 +58,7 @@ fun main() {
 
         try {
             val jsonObject = jsonParser.parse(line).asJsonObject
-            val code: JsonElement? = jsonObject.get("code")
+            val code: JsonElement? = jsonObject.get("response_code")
             code?.let {
                 println("Send Message Block, waiting for response")
                 val response = connectionHandler?.sendMessageBlock(line, it.asInt)

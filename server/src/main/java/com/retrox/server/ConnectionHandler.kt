@@ -72,8 +72,11 @@ class ConnectionHandler(val connection: WebSocket) {
             return
         }
 
-        val code = jsonObject.get("code").asInt
+        val code = jsonObject.get("response_code").asInt
         val channel = pausedChannels[code]
+        if (channel == null) {
+            sendMessage("Wrong Sync Code: $code")
+        }
         channel?.offer(message) // todo 检查可靠性 也许需要Block掉
         pausedChannels.remove(code) // 去除阻塞Channel的订阅
     }

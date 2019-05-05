@@ -6,10 +6,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.retrox.RealServer;
 import com.retrox.WSServer;
+import com.retrox.server.ConnectionManager;
 import edu.tamu.aser.StartExploring;
 import edu.tamu.aser.config.Configuration;
 import edu.tamu.aser.instrumentation.RVGlobalStateForInstrumentation;
+import edu.tamu.aser.server.ChooseManager;
 import edu.tamu.aser.trace.Trace;
 import edu.tamu.aser.trace.TraceInfo;
 //import edu.tamu.aser.instrumentation.RVGlobalStateForInstrumentation;
@@ -280,7 +283,7 @@ public class MCRStrategy extends SchedulingStrategy {
 
 
 	@Override
-	public Object choose(SortedSet<?> objectChoices, ChoiceType choiceType) {
+	public Object choose(SortedSet<? /*ThreadInfo*/ extends Object> objectChoices, ChoiceType choiceType) {
 		int chosenIndex = 0;
 		Object chosenObject = null;
 		System.out.println("=======================");
@@ -302,12 +305,21 @@ public class MCRStrategy extends SchedulingStrategy {
 //			chosen = scanner.nextInt();
 //		}
 
+		int index = ChooseManager.INSTANCE.sendChooseMessageSync(objectChoices);
+
 		Random random = new Random();
 		int next = random.nextInt(objectChoices.size());
-		System.out.println("随机输入节点: " + next);
+
+		chosenIndex = index; // 这里next 就直接随机 如果是index那就是选择的
+		if (index == -1) {
+			chosenIndex = next; // -1 表示随机
+			System.out.println("随机输入节点: " + chosenIndex);
+		} else {
+			System.out.println("远程输入节点: " + chosenIndex);
+		}
+
 
 //		int chosen = 0;
-		chosenIndex = next;
 		chosenObject = getChosenObject(chosenIndex, objectChoices);
 
 		MCRStrategy.choicesMade.add(chosenIndex);
