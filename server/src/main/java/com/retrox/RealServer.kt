@@ -5,6 +5,8 @@ import com.google.gson.JsonParser
 import com.google.gson.JsonSyntaxException
 import com.retrox.server.ConnectionHandler
 import com.retrox.server.ConnectionManager
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.runBlocking
 import org.java_websocket.WebSocket
 import org.java_websocket.handshake.ClientHandshake
 import org.java_websocket.server.WebSocketServer
@@ -16,20 +18,24 @@ import java.util.*
 
 class RealServer(address: InetSocketAddress = InetSocketAddress(4444)) : WebSocketServer(address) {
     var conectionHandler: ConnectionHandler? = null
+    val channel = Channel<ConnectionHandler>(1) // 暂时设计成单通道 不考虑多个连接
+
 
     override fun onOpen(conn: WebSocket, handshake: ClientHandshake) {
         conn.send("Welcome to server ${handshake.resourceDescriptor}")
         println("New Connection ${conn.remoteSocketAddress} ${handshake.resourceDescriptor}")
-        conectionHandler = ConnectionHandler(conn)
-        ConnectionManager.connectionHandler = conectionHandler // 暂时给他一个全局性的连接
+        val localConectionHandler = ConnectionHandler(conn)
+        ConnectionManager.connectionHandler = localConectionHandler // 暂时给他一个全局性的连接
+        conectionHandler = localConectionHandler
+        channel.offer(localConectionHandler)
     }
 
     override fun onClose(conn: WebSocket, code: Int, reason: String, remote: Boolean) {
-        println("DisConnected : $conn")
+        println("DisConnected: $conn")
     }
 
     override fun onMessage(conn: WebSocket, message: String) {
-        println("Receive Message $conn $message")
+        println("Receive Message: $conn $message")
         conectionHandler?.offerMessage(message)
     }
 
@@ -40,6 +46,12 @@ class RealServer(address: InetSocketAddress = InetSocketAddress(4444)) : WebSock
     override fun onError(conn: WebSocket?, ex: Exception?) {
         println("WS ERROR")
         ex?.printStackTrace()
+    }
+
+    fun awaitConnection() = runBlocking {
+        println("await connection")
+        channel.receive()
+        println("await connection finished")
     }
 
 }

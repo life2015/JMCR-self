@@ -122,9 +122,7 @@ public class JUnit4MCRRunner extends BlockJUnit4ClassRunner {
         // Start Server
         RealServer server = new RealServer();
         server.start();
-		Scanner scanner = new Scanner(System.in);
-        System.out.println("确保客户端连接 然后敲回车。"); // 理论上应该写个阻塞的Listener来控制 将来要支持客户端控制流程
-		scanner.nextLine();
+        server.awaitConnection();
 
         if (!schedules.isEmpty()) {
             for (Entry<String, Orderings> schedule : schedules.entrySet()) {

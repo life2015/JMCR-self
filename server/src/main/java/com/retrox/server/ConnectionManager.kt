@@ -3,6 +3,8 @@ package com.retrox.server
 object ConnectionManager {
     var connectionHandler: ConnectionHandler? = null
 
+//    fun getConnectionHandlerSync() =
+
     private var sync_index = 0
 
     fun getNewSyncCode(): Int {

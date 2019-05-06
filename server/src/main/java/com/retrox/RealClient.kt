@@ -11,14 +11,14 @@ import java.io.BufferedReader
 
 class RealClient(serverUri: URI?) : WebSocketClient(serverUri) {
     override fun onOpen(handshakedata: ServerHandshake) {
-        println("Server HandShake $handshakedata")
+        println("Server HandShake: $handshakedata")
     }
 
     override fun onClose(code: Int, reason: String?, remote: Boolean) {
     }
 
     override fun onMessage(message: String?) {
-        println("Server Message $message")
+        println("Server Message: $message")
     }
 
     override fun onError(ex: Exception?) {
