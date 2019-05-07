@@ -12,10 +12,12 @@ public class RVExample {
 	private static int y;
 	private static Object lock = new Object();
 	
-	public static void main(String[] args) {	
+	public static void main(String[] args) {
+		Thread.currentThread().setName("主线程");
 		Thread t1 = new Thread(new Runnable() {
 			@Override
 			public void run() {
+				Thread.currentThread().setName("线程1");
 				for (int i = 0; i < 2; i++) {
 					synchronized (lock) {
 						x = 0;
@@ -32,11 +34,14 @@ public class RVExample {
 		Thread t2 = new Thread(new Runnable() {
 			@Override
 			public void run() {
+				Thread.currentThread().setName("线程2");
 				for (int i = 0; i < 2; i++) {
 					if (x > 1) {
+						System.err.println("Find the error!");
+						fail("FAIL!!!!!!!!!!! x > 1 FUCK ");
 						if (y == 3) {
-//							System.err.println("Find the error!");
-//							fail("FAIL!!!!!!!!!!!");
+							System.err.println("Find the error!");
+							fail("FAIL!!!!!!!!!!!");
 						} else
 							y = 2;
 					}

@@ -281,6 +281,8 @@ public class MCRStrategy extends SchedulingStrategy {
 		return chosenObject;
 	}
 
+	private static int[] queueTest = {1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2}; // RVRuntime 错误序列
+	private static int chooseTime = 0;
 
 	@Override
 	public Object choose(SortedSet<? /*ThreadInfo*/ extends Object> objectChoices, ChoiceType choiceType) {
@@ -298,14 +300,21 @@ public class MCRStrategy extends SchedulingStrategy {
 			}
 		}
 		System.out.println("请输入选择的节点");
-//		WSServer.INSTANCE.sayHello();
-//		Scanner scanner = new Scanner(System.in);
-//		int chosen = Integer.MAX_VALUE;
-//		while (chosen > objectChoices.size() - 1) {
-//			chosen = scanner.nextInt();
-//		}
+		/*下面这几行是命令行手动输入*/
+		Scanner scanner = new Scanner(System.in);
+		int chosen = Integer.MAX_VALUE;
+		while (chosen > objectChoices.size() - 1) {
+			chosen = scanner.nextInt();
+		}
 
-		int index = ChooseManager.INSTANCE.sendChooseMessageSync(objectChoices);
+//		int chosen = queueTest[chooseTime];
+//		chooseTime++;
+
+		/* 下面这几行是Remote输入 也可以直接 -1 让它随机 */
+
+//		int index = ChooseManager.INSTANCE.sendChooseMessageSync(objectChoices);
+		int index = -1;
+		index = chosen;
 
 		Random random = new Random();
 		int next = random.nextInt(objectChoices.size());

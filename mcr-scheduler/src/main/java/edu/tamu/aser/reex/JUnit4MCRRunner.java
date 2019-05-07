@@ -120,9 +120,9 @@ public class JUnit4MCRRunner extends BlockJUnit4ClassRunner {
         Map<String, Orderings> schedules = collectSchedules();
 
         // Start Server
-        RealServer server = new RealServer();
-        server.start();
-        server.awaitConnection();
+//        RealServer server = new RealServer();
+//        server.start();
+//        server.awaitConnection();
 
         if (!schedules.isEmpty()) {
             for (Entry<String, Orderings> schedule : schedules.entrySet()) {

@@ -1226,7 +1226,7 @@ public class Scheduler {
         schedulerStateLock.lock();       
         try {
             Listeners.fireBeforeEvent(eventDesc);
-            currentThreadInfo = liveThreadInfos.get(Thread.currentThread());
+            currentThreadInfo = liveThreadInfos.get(Thread.currentThread()); // 这边阻塞的话 阻塞的都是当前线程
             if(currentThreadInfo!=null)
             {
                 currentThreadInfo.setEventDesc(eventDesc);

@@ -153,6 +153,7 @@ public class ExplorationStatsListener extends ExplorationListenerAdapter {
         failureDetected = true;
         System.out.flush();
         System.err.flush();
+        System.err.println(choicesMade);
         System.err.println("\n!!! FAILURE DETECTED DURING EXPLORATION OF SCHEDULE #" + numSchedules + ": " + ((errorMsg == null) ? "" : errorMsg));
         System.err.println("The following trace triggered this error:");
         

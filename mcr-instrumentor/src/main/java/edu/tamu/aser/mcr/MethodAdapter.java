@@ -393,6 +393,8 @@ public class MethodAdapter extends AdviceAdapter implements Opcodes {
 						RVConfig.instance.DESC_LOG_FIELD_ACCESS);
 
                 this.informSchedulerAboutFieldAccess(true, isRead, owner, name, desc, index);
+                pop();
+                mv.visitFieldInsn(opcode, owner, name, desc);
 
 
 //                visitLdcInsn(name);
