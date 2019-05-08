@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 import com.retrox.RealServer;
+import com.retrox.server.ConnectionManager;
 import edu.tamu.aser.reex.JUnit4WrappedRunNotifier;
 import edu.tamu.aser.reex.Scheduler;
 import edu.tamu.aser.scheduling.MCRProperties;

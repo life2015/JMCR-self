@@ -8,7 +8,9 @@ import com.retrox.server.ConnectionManager
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 import org.java_websocket.WebSocket
+import org.java_websocket.drafts.Draft
 import org.java_websocket.handshake.ClientHandshake
+import org.java_websocket.handshake.ServerHandshakeBuilder
 import org.java_websocket.server.WebSocketServer
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -16,10 +18,18 @@ import java.lang.Exception
 import java.net.InetSocketAddress
 import java.util.*
 
+
+
 class RealServer(address: InetSocketAddress = InetSocketAddress(4444)) : WebSocketServer(address) {
     var conectionHandler: ConnectionHandler? = null
     val channel = Channel<ConnectionHandler>(1) // 暂时设计成单通道 不考虑多个连接
 
+
+    override fun onWebsocketHandshakeReceivedAsServer(conn: WebSocket?, draft: Draft?, request: ClientHandshake?): ServerHandshakeBuilder {
+        val builder = super.onWebsocketHandshakeReceivedAsServer(conn, draft, request)
+        builder.put("Access-Control-Allow-Origin", "*")
+        return builder
+    }
 
     override fun onOpen(conn: WebSocket, handshake: ClientHandshake) {
         conn.send("Welcome to server ${handshake.resourceDescriptor}")

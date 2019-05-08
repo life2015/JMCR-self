@@ -393,8 +393,8 @@ public class MethodAdapter extends AdviceAdapter implements Opcodes {
 						RVConfig.instance.DESC_LOG_FIELD_ACCESS);
 
                 this.informSchedulerAboutFieldAccess(true, isRead, owner, name, desc, index);
-                pop();
-                mv.visitFieldInsn(opcode, owner, name, desc);
+                pop(); // 这里Pop一个的原因是避免爆栈 顺便去掉之前栈顶的老数据
+                mv.visitFieldInsn(opcode, owner, name, desc); // 然后用新的数据换到栈顶
 
 
 //                visitLdcInsn(name);
