@@ -38,6 +38,7 @@ class RealServer(address: InetSocketAddress = InetSocketAddress(4444)) : WebSock
         ConnectionManager.connectionHandler = localConectionHandler // 暂时给他一个全局性的连接
         conectionHandler = localConectionHandler
         channel.offer(localConectionHandler)
+        synchronized()
     }
 
     override fun onClose(conn: WebSocket, code: Int, reason: String, remote: Boolean) {

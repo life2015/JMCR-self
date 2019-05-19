@@ -7,13 +7,15 @@ import java.util.List;
 
 public class Main {
 
-    static {
-
-    }
-
     public int local1;
     public String sloc2;
     public RealClient client;
+    private static String staticString = "Hello";
+
+    public void testGetStatic() {
+        String local = staticString;
+        System.out.print(local);
+    }
 
     public void test(int x) {
         String a = sloc2;
